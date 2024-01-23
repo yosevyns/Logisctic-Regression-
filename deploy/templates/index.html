@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Heart Disease Prediction</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <form method="POST" action="/predict">
+
+                    {% for column in X.columns %}
+                        <div class="form-group">
+                            <label for="{{ column }}">{{ column }}</label>
+        
+                            {% if column == 'age' %}
+                                <input type="range" name="{{ column }}" id="{{ column }}" min="29" max="77" value="" step="1" class="form-control-range" required>
+                            {% elif column == 'sex' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">Female</option>
+                                    <option value="1">Male</option>
+                                </select>
+                            {% elif column == 'cp' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">Typical Angina</option>
+                                    <option value="1">Atypical Angina</option>
+                                    <option value="2">Non-Anginal Pain</option>
+                                    <option value="3">Asymptomatic</option>
+                                </select>
+                            {% elif column == 'trtbps' %}
+                                <input type="range" name="{{ column }}" id="{{ column }}" min="94" max="200" value="" step="1" class="form-control-range" required>
+                            {% elif column == 'chol' %}
+                                <input type="range" name="{{ column }}" id="{{ column }}" min="126" max="564" value="" step="1" class="form-control-range" required>
+                            {% elif column == 'fbs' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">False</option>
+                                    <option value="1">True</option>
+                                </select>
+                            {% elif column == 'restecg' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">Normal</option>
+                                    <option value="1">ST-T Wave Abnormality</option>
+                                    <option value="2">Left Ventricular Hypertrophy</option>
+                                </select>
+                            {% elif column == 'thalachh' %}
+                                <input type="range" name="{{ column }}" id="{{ column }}" min="71" max="202" value="" step="1" class="form-control-range" required>
+                            {% elif column == 'exng' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            {% elif column == 'oldpeak' %}
+                                <input type="range" name="{{ column }}" id="{{ column }}" min="0.0" max="6.2" value="" step="0.1" class="form-control-range" required>
+                            {% elif column == 'slp' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">Upsloping</option>
+                                    <option value="1">Flat</option>
+                                    <option value="2">Downsloping</option>
+                                </select>
+                            {% elif column == 'caa' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            {% elif column == 'thall' %}
+                                <select name="{{ column }}" id="{{ column }}" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            {% endif %}
+                            
+                            <span id="{{ column }}_value" style="display: none;">Value: 
+                                {% if column in ['sex', 'fbs', 'exng'] %}
+                                    <!-- For options with default values, leave empty -->
+                                {% else %}
+                                    {{ X[column].mean() }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% endfor %}
+        
+                    <button type="submit" class="btn btn-primary">Predict</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h2>Attribute Descriptions</h2>
+                <ul>
+                    <li><strong>age:</strong> Age of the patient</li>
+                    <li><strong>sex:</strong> Gender of the patient (0 = Female, 1 = Male)</li>
+                    <li><strong>cp:</strong> Chest pain type (0 = Typical Angina, 1 = Atypical Angina, 2 = Non-Anginal Pain, 3 = Asymptomatic)</li>
+                    <li><strong>trtbps:</strong> Resting blood pressure (in mm Hg)</li>
+                    <li><strong>chol:</strong> Serum cholesterol in mg/dl</li>
+                    <li><strong>fbs:</strong> Fasting blood sugar (0 = False, 1 = True)</li>
+                    <li><strong>restecg:</strong> Resting electrocardiographic results (0 = Normal, 1 = ST-T Wave Abnormality, 2 = Left Ventricular Hypertrophy)</li>
+                    <li><strong>thalachh:</strong> Maximum heart rate achieved</li>
+                    <li><strong>exng:</strong> Exercise induced angina (0 = No, 1 = Yes)</li>
+                    <li><strong>oldpeak:</strong> ST depression induced by exercise relative to rest</li>
+                    <li><strong>slp:</strong> Slope of the peak exercise ST segment (0 = Upsloping, 1 = Flat, 2 = Downsloping)</li>
+                    <li><strong>caa:</strong> Number of major vessels colored by fluoroscopy (0-4)</li>
+                    <li><strong>thall:</strong> Thallium stress test result (0-3)</li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        {% if logistic_prediction or linear_prediction %}
+        <div class="mt-5">
+            <div class="col-md-12">
+                <h2>Input Values</h2>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            {% for column in X.columns %}
+                                <td><strong>{{ column }}</strong></td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            {% for column in X.columns %}
+                                <td>{{ request.form[column] }}</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <!-- Add your prediction result display here -->
+                {% if logistic_prediction %}
+                    <p><strong>Logistic Prediction:</strong> {{ logistic_prediction }}</p>
+                {% endif %}
+    
+                {% if linear_prediction %}
+                    <p><strong>Linear Prediction:</strong> {{ linear_prediction }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    
+    
+    </div>
+
+    <!-- Bootstrap JS and Popper.js scripts (needed for some Bootstrap features) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- jQuery Script untuk mengatur nilai slider dan memperbarui tampilan -->
+    <script>
+        $(document).ready(function () {
+            {% for column in X.columns %}
+                {% if column not in ['age', 'sex', 'trtbps', 'chol', 'thalachh', 'oldpeak'] %}
+                    $('select[name="{{ column }}"]').on('change', function () {
+                        var value = $(this).val();
+                        if (value === "") {
+                            $('#{{ column }}_value').hide();
+                        } else {
+                            $('#{{ column }}_value').show().text("Value: " + value);
+                        }
+                    });
+                {% elif column in ['trtbps', 'chol', 'thalachh', 'oldpeak'] %}
+                    $('input[name="{{ column }}"]').on('input', function () {
+                        var value = $(this).val();
+                        if (value === "") {
+                            $('#{{ column }}_value').hide();
+                        } else {
+                            $('#{{ column }}_value').show().text("Value: " + value);
+                        }
+                    });
+                {% elif column == 'age' %}
+                    $('input[name="{{ column }}"]').on('input', function () {
+                        var value = $(this).val();
+                        if (value === "") {
+                            $('#{{ column }}_value').hide();
+                        } else {
+                            $('#{{ column }}_value').show().text("Value: " + value);
+                        }
+                    });
+                {% elif column == 'sex' %}
+                    $('select[name="{{ column }}"]').on('change', function () {
+                        var value = $(this).val();
+                        if (value === "") {
+                            $('#{{ column }}_value').hide();
+                        } else {
+                            var sexLabel = value === "0" ? "Female" : "Male";
+                            $('#{{ column }}_value').show().text("Value: " + sexLabel);
+                        }
+                    });
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+</body>
+</html>
